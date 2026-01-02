@@ -339,7 +339,7 @@ const projects = [
 
           {/* Category Filters */}
           {showFilters && (
-            <div className="mb-4 p-4 rounded-lg border border-border bg-card">
+            <div className="mb-4 p-4 dark:border-slate-700 rounded-lg border border-border bg-card">
               <h3 className="mb-3 text-sm font-semibold text-foreground">Filter by Category</h3>
               <div className="flex flex-wrap gap-2">
                 {categories.map(category => (

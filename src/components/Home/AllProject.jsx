@@ -317,12 +317,12 @@ const projects = [
             </div>
             <div className="flex gap-3">
               <select
-                className="px-4 py-2 dark:border-slate-700 rounded-md border border-border bg-background text-foreground text-sm font-medium hover:bg-muted hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors cursor-pointer"
+                className="px-4 py-2 dark:bg-transparent dark:border-slate-700 rounded-md border border-border bg-background text-foreground text-sm font-medium hover:bg-muted hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors cursor-pointer"
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
               >
                 {sortOptions.map(option => (
-                  <option key={option.value} value={option.value}>
+                  <option key={option.value} value={option.value} className='dark:text-gray dark:bg-gray-700'>
                     {option.label}
                   </option>
                 ))}

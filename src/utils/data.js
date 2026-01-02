@@ -7,7 +7,7 @@ export const projects = [
     status: 'Completed',
     technologies: ['ASP.NET Core', 'Angular', 'Web API', 'Entity Framework Core', 'SQL Server 2019', 'jQuery', 'Ajax'],
     stats: [
-      { label: 'Team Size', value: '5-8' },
+      { label: 'Team Size', value: '100+' },
       { label: 'Performance Improvement', value: '30%+' },
     ],
     link: '/',
@@ -45,7 +45,7 @@ export const projects = [
     status: 'Completed',
     technologies: ['.NET Core', 'React', 'PrimeReact', 'Web API', 'SQL Server 2022', 'AWS Lambda', 'S3'],
     stats: [
-      { label: 'Modules Developed', value: '5+' },
+      { label: 'Modules Developed', value: '11+' },
       { label: 'Employee Capacity', value: '500+' },
     ],
     link: '/',

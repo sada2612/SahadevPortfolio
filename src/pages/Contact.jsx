@@ -1,10 +1,118 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
-  const handleSubmit = (e) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSent, setIsSent] = useState(false);
+  const [error, setError] = useState('');
+
+  // Initialize EmailJS when component mounts
+  useEffect(() => {
+    // Replace with your actual public key
+    emailjs.init("8H71vFToOhBO78vB9");
+  }, []);
+
+  const getClientIP = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      console.log('IP fetch failed:', error);
+      return 'IP not available';
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted');
+    setIsLoading(true);
+    setError('');
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    // Get current time for the email template
+    const now = new Date();
+    const formattedTime = now.toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    try {
+      // Get client IP (wrap in try-catch to prevent blocking if API fails)
+      let clientIP = 'IP not available';
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        clientIP = ipData.ip;
+      } catch (ipError) {
+        console.log('IP fetch failed, continuing without IP:', ipError);
+      }
+
+      // Create template parameters matching your template variables
+      const templateParams = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message'),
+        time: formattedTime,
+        to_email: 'sahadev.dotnet@gmail.com',
+        reply_to: formData.get('email'),
+        date: now.toLocaleDateString(),
+        ip: clientIP
+      };
+
+      console.log('Sending email with params:', templateParams);
+      
+      // Replace these with your actual EmailJS credentials
+      const serviceID = import.meta.env.ServiceID; // EmailJS Service ID
+      const templateID = import.meta.env.TemplateID; // EmailJS Template ID
+      const publicKey = import.meta.env.PublicKey; // EmailJS Public Key
+      
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        serviceID,
+        templateID,
+        templateParams,
+        publicKey
+      );
+      
+      console.log('Email sent successfully:', response);
+      console.log('Response status:', response.status);
+      console.log('Response text:', response.text);
+      
+      setIsSent(true);
+      form.reset();
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setIsSent(false);
+      }, 5000);
+      
+    } catch (err) {
+      console.error('Failed to send email:', err);
+      console.error('Error details:', {
+        message: err.message,
+        text: err.text,
+        status: err.status
+      });
+      
+      // Provide more specific error message
+      if (err.text) {
+        setError(`Failed to send message: ${err.text}. Please check your EmailJS configuration.`);
+      } else if (err.message) {
+        setError(`Failed to send message: ${err.message}. Please try again later.`);
+      } else {
+        setError('Failed to send message. Please check your internet connection and try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -183,6 +291,25 @@ const Contact = () => {
         <div className="lg:col-span-2" style={{ opacity: 1, transform: 'none' }}>
           <div className="rounded-xl border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow border-border p-8">
             <h2 className="mb-6 text-2xl font-bold text-foreground">Send Me a Message</h2>
+            
+            {/* Success Message */}
+            {isSent && (
+              <div className="mb-6 p-4 bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 rounded-md">
+                <p className="text-green-800 dark:text-green-200 text-center">
+                  Message sent successfully! I'll get back to you soon.
+                </p>
+              </div>
+            )}
+            
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-100 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-md">
+                <p className="text-red-800 dark:text-red-200 text-center">
+                  {error}
+                </p>
+              </div>
+            )}
+            
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Name Field */}
               <div>
@@ -199,6 +326,7 @@ const Contact = () => {
                   type="text"
                   name="name"
                   required
+                  disabled={isLoading}
                 />
               </div>
 
@@ -217,6 +345,7 @@ const Contact = () => {
                   type="email"
                   name="email"
                   required
+                  disabled={isLoading}
                 />
               </div>
 
@@ -235,6 +364,7 @@ const Contact = () => {
                   type="text"
                   name="subject"
                   required
+                  disabled={isLoading}
                 />
               </div>
 
@@ -253,30 +383,48 @@ const Contact = () => {
                   rows="6"
                   name="message"
                   required
+                  disabled={isLoading}
                 ></textarea>
               </div>
 
               {/* Submit Button */}
               <button
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 cursor-pointer [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 h-9 px-4 py-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium"
+                className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 shadow h-9 px-4 py-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium ${
+                  isLoading 
+                    ? 'opacity-70 cursor-not-allowed' 
+                    : 'hover:from-blue-700 hover:to-purple-700 cursor-pointer'
+                }`}
                 type="submit"
+                disabled={isLoading}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-send mr-2 h-4 w-4"
-                >
-                  <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
-                  <path d="m21.854 2.147-10.94 10.939"></path>
-                </svg>
-                Send Message
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-send mr-2 h-4 w-4"
+                    >
+                      <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
+                      <path d="m21.854 2.147-10.94 10.939"></path>
+                    </svg>
+                    Send Message
+                  </>
+                )}
               </button>
             </form>
 

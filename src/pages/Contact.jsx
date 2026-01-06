@@ -5,11 +5,13 @@ const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState('');
-
+  const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+  const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+  const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
   // Initialize EmailJS when component mounts
   useEffect(() => {
     // Replace with your actual public key
-    emailjs.init("8H71vFToOhBO78vB9");
+    emailjs.init(PUBLIC_KEY);
   }, []);
 
   const getClientIP = async () => {
@@ -18,7 +20,6 @@ const Contact = () => {
       const data = await response.json();
       return data.ip;
     } catch (error) {
-      console.log('IP fetch failed:', error);
       return 'IP not available';
     }
   };
@@ -66,25 +67,14 @@ const Contact = () => {
         date: now.toLocaleDateString(),
         ip: clientIP
       };
-
-      console.log('Sending email with params:', templateParams);
-      
-      // Replace these with your actual EmailJS credentials
-      const serviceID = import.meta.env.ServiceID; // EmailJS Service ID
-      const templateID = import.meta.env.TemplateID; // EmailJS Template ID
-      const publicKey = import.meta.env.PublicKey; // EmailJS Public Key
       
       // Send email using EmailJS
       const response = await emailjs.send(
-        serviceID,
-        templateID,
+        SERVICE_ID,
+        TEMPLATE_ID,
         templateParams,
-        publicKey
+        PUBLIC_KEY
       );
-      
-      console.log('Email sent successfully:', response);
-      console.log('Response status:', response.status);
-      console.log('Response text:', response.text);
       
       setIsSent(true);
       form.reset();

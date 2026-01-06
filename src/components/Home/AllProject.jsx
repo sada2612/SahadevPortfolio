@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ArrowRight } from 'lucide-react';
+import { Search, Filter, ArrowRight, X } from 'lucide-react';
 
 const AllProjects = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('date-desc');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState(['All']);
 
-  // Projects data
-const projects = [
-  {
+  // Projects data (same as before)
+  const projects = [
+    {
     id: 1,
     title: "Acentra Health - Healthcare Management System",
     description: "Developed healthcare applications to streamline data management and improve user experience. Built secure, scalable modules for patient data management, treatment tracking, and healthcare analytics.",
@@ -210,7 +211,7 @@ const projects = [
     link: "/projects/aws-serverless-contact-form",
     github: "https://github.com/yourusername/aws-contact-form"
   }
-];
+  ];
 
   // Available categories for filtering
   const categories = [
@@ -232,6 +233,15 @@ const projects = [
     { value: "category", label: "Category" }
   ];
 
+  // Get all unique categories from projects
+  const getAllProjectCategories = () => {
+    const allCategories = new Set();
+    projects.forEach(project => {
+      project.categories.forEach(cat => allCategories.add(cat));
+    });
+    return Array.from(allCategories);
+  };
+
   // Filter and sort projects
   useEffect(() => {
     let results = [...projects];
@@ -243,6 +253,16 @@ const projects = [
         project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         project.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
       );
+    }
+
+    // Apply category filter
+    if (selectedCategories.length > 0 && !selectedCategories.includes('All')) {
+      results = results.filter(project => {
+        // Check if project has at least one category in selectedCategories
+        return project.categories.some(category => 
+          selectedCategories.includes(category)
+        );
+      });
     }
 
     // Apply sorting
@@ -264,7 +284,37 @@ const projects = [
     });
 
     setFilteredProjects(results);
-  }, [searchQuery, sortOption]);
+  }, [searchQuery, sortOption, selectedCategories]);
+
+  // Handle category selection
+  const handleCategorySelect = (category) => {
+    if (category === 'All') {
+      // If "All" is clicked, clear other selections and select only "All"
+      setSelectedCategories(['All']);
+    } else {
+      // Remove "All" if it's currently selected
+      const newSelected = selectedCategories.includes('All') 
+        ? [] 
+        : [...selectedCategories];
+      
+      // Toggle the category
+      if (newSelected.includes(category)) {
+        // Remove category
+        const updated = newSelected.filter(cat => cat !== category);
+        // If no categories selected, default to "All"
+        setSelectedCategories(updated.length > 0 ? updated : ['All']);
+      } else {
+        // Add category
+        setSelectedCategories([...newSelected, category]);
+      }
+    }
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setSelectedCategories(['All']);
+    setSearchQuery('');
+  };
 
   // Get category color
   const getCategoryColor = (category) => {
@@ -275,7 +325,16 @@ const projects = [
       'Backend': 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800',
       'Mobile': 'bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-950/50 dark:text-pink-300 dark:border-pink-800',
       'Ongoing': 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-700',
-      'Completed': 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700'
+      'Completed': 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700',
+      'Healthcare': 'bg-teal-100 text-teal-700 border-teal-200 dark:bg-teal-950/50 dark:text-teal-300 dark:border-teal-800',
+      'FinTech': 'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-950/50 dark:text-indigo-300 dark:border-indigo-800',
+      'Enterprise': 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700',
+      'Enterprise Solutions': 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700',
+      'Real Estate': 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950/50 dark:text-orange-300 dark:border-orange-800',
+      'E-commerce': 'bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800',
+      'Learning': 'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-950/50 dark:text-cyan-300 dark:border-cyan-800',
+      'DevOps': 'bg-lime-100 text-lime-700 border-lime-200 dark:bg-lime-950/50 dark:text-lime-300 dark:border-lime-800',
+      'Cloud': 'bg-sky-100 text-sky-700 border-sky-200 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800'
     };
     return colors[category] || 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700';
   };
@@ -286,6 +345,9 @@ const projects = [
       ? 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700'
       : 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-700';
   };
+
+  // Get active categories from projects
+  const activeCategories = getAllProjectCategories();
 
   return (
     <div className="min-h-screen bg-background py-20">
@@ -337,118 +399,222 @@ const projects = [
             </div>
           </div>
 
+          {/* Active Filters */}
+          {(selectedCategories.length > 0 && !(selectedCategories.length === 1 && selectedCategories[0] === 'All')) || searchQuery ? (
+            <div className="mb-4 p-4 dark:border-slate-700 rounded-lg border border-border bg-card">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-foreground">Active Filters</h3>
+                <button
+                  onClick={clearAllFilters}
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="h-3 w-3" />
+                  Clear all
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {searchQuery && (
+                  <div className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                    Search: "{searchQuery}"
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="ml-1 hover:bg-primary/20 rounded-full p-0.5"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+                {selectedCategories.map(category => category !== 'All' && (
+                  <div
+                    key={category}
+                    className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                  >
+                    {category}
+                    <button
+                      onClick={() => handleCategorySelect(category)}
+                      className="ml-1 hover:bg-primary/20 rounded-full p-0.5"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           {/* Category Filters */}
           {showFilters && (
             <div className="mb-4 p-4 dark:border-slate-700 rounded-lg border border-border bg-card">
-              <h3 className="mb-3 text-sm font-semibold text-foreground">Filter by Category</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-foreground">Filter by Category</h3>
+                <span className="text-xs text-muted-foreground">
+                  {selectedCategories.length > 0 && !(selectedCategories.length === 1 && selectedCategories[0] === 'All')
+                    ? `${selectedCategories.length} selected`
+                    : 'All selected'}
+                </span>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {categories.map(category => (
                   <button
                     key={category}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${getCategoryColor(category)} hover:opacity-80`}
-                    onClick={() => {
-                      // Implement category filtering logic here
-                      console.log(`Filter by ${category}`);
-                    }}
+                    className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${getCategoryColor(category)} hover:opacity-80 ${
+                      selectedCategories.includes(category) 
+                        ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-gray-900' 
+                        : ''
+                    }`}
+                    onClick={() => handleCategorySelect(category)}
                   >
                     {category}
                   </button>
                 ))}
+              </div>
+              
+              {/* Additional categories from projects */}
+              <div className="mt-4">
+                <h4 className="mb-2 text-sm font-semibold text-foreground">Project Categories</h4>
+                <div className="flex flex-wrap gap-2">
+                  {activeCategories.map(category => (
+                    <button
+                      key={category}
+                      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ${getCategoryColor(category)} hover:opacity-80 ${
+                        selectedCategories.includes(category) 
+                          ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-gray-900' 
+                          : ''
+                      }`}
+                      onClick={() => handleCategorySelect(category)}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}
         </div>
 
         {/* Project Count */}
-        <div className="mb-6 text-sm text-muted-foreground">
-          Showing {filteredProjects.length} of {projects.length} projects
+        <div className="mb-6 flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Showing {filteredProjects.length} of {projects.length} projects
+            {selectedCategories.length > 0 && !(selectedCategories.length === 1 && selectedCategories[0] === 'All') && (
+              <span className="ml-2">
+                • Filtered by: {selectedCategories.join(', ')}
+              </span>
+            )}
+          </div>
+          {filteredProjects.length === 0 && (
+            <button
+              onClick={clearAllFilters}
+              className="text-sm text-primary hover:underline"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
 
         {/* Projects Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map(project => (
-            <div key={project.id} className="group">
-              <a className="cursor-pointer" href={project.link}>
-                <div className="rounded-xl border dark:border-slate-700 dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow group relative h-full overflow-hidden border-border bg-card transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                  {/* Gradient Overlays */}
-                  <div className="absolute inset-0 z-10 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <div className="absolute inset-0 z-20 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <div className="absolute inset-0 rounded-lg blur-xl bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-20" />
+        {filteredProjects.length > 0 ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map(project => (
+              <div key={project.id} className="group">
+                <a className="cursor-pointer" href={project.link}>
+                  <div className="rounded-xl border dark:border-slate-700 dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow group relative h-full overflow-hidden border-border bg-card transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+                    {/* Gradient Overlays */}
+                    <div className="absolute inset-0 z-10 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute inset-0 z-20 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <div className="absolute inset-0 rounded-lg blur-xl bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-20" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="relative z-30 p-6">
+                      {/* Title and Featured Badge */}
+                      <div className="mb-4 flex items-start justify-between gap-3">
+                        <h3 className="text-xl font-bold text-foreground transition-colors group-hover:text-primary">
+                          {project.title}
+                        </h3>
+                        {project.featured && (
+                          <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold shrink-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                            Featured
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Description */}
+                      <p className="mb-4 line-clamp-3 text-sm text-muted-foreground">
+                        {project.description}
+                      </p>
+
+                      {/* Categories */}
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        {project.categories.map((category, index) => (
+                          <div
+                            key={index}
+                            className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors shadow hover:opacity-80 ${
+                              index === 0 ? getCategoryColor(category) : getStatusColor(category)
+                            }`}
+                          >
+                            {category}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Technologies */}
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        {project.technologies.slice(0, 4).map((tech, index) => (
+                          <div
+                            key={index}
+                            className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-slate-100 dark:border-slate-600 border-border text-muted-foreground hover:border-primary/50"
+                          >
+                            {tech}
+                          </div>
+                        ))}
+                        {project.technologies.length > 4 && (
+                          <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-slate-100 dark:border-slate-600 border-border text-muted-foreground hover:border-primary/50">
+                            +{project.technologies.length - 4} more
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Stats */}
+                      <div className="flex flex-wrap gap-4 border-t dark:border-slate-700 border-border pt-4">
+                        {project.stats.map((stat, index) => (
+                          <div key={index}>
+                            <p className="text-xs text-muted-foreground">{stat.label}</p>
+                            <p className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-lg font-bold text-transparent">
+                              {stat.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* View Details */}
+                      <div className="mt-4 flex items-center text-sm font-medium text-primary transition-transform group-hover:translate-x-1">
+                        View Details
+                        <ArrowRight className="ml-1 h-4 w-4" />
+                      </div>
+                    </div>
                   </div>
-
-                  {/* Content */}
-                  <div className="relative z-30 p-6">
-                    {/* Title and Featured Badge */}
-                    <div className="mb-4 flex items-start justify-between gap-3">
-                      <h3 className="text-xl font-bold text-foreground transition-colors group-hover:text-primary">
-                        {project.title}
-                      </h3>
-                      {project.featured && (
-                        <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold shrink-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                          Featured
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Description */}
-                    <p className="mb-4 line-clamp-3 text-sm text-muted-foreground">
-                      {project.description}
-                    </p>
-
-                    {/* Categories */}
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      {project.categories.map((category, index) => (
-                        <div
-                          key={index}
-                          className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors shadow hover:opacity-80 ${
-                            index === 0 ? getCategoryColor(category) : getStatusColor(category)
-                          }`}
-                        >
-                          {category}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Technologies */}
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      {project.technologies.slice(0, 4).map((tech, index) => (
-                        <div
-                          key={index}
-                          className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-slate-100 dark:border-slate-600 border-border text-muted-foreground hover:border-primary/50"
-                        >
-                          {tech}
-                        </div>
-                      ))}
-                      {project.technologies.length > 4 && (
-                        <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-slate-100 dark:border-slate-600 border-border text-muted-foreground hover:border-primary/50">
-                          +{project.technologies.length - 4} more
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Stats */}
-                    <div className="flex flex-wrap gap-4 border-t dark:border-slate-700 border-border pt-4">
-                      {project.stats.map((stat, index) => (
-                        <div key={index}>
-                          <p className="text-xs text-muted-foreground">{stat.label}</p>
-                          <p className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-lg font-bold text-transparent">
-                            {stat.value}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* View Details */}
-                    <div className="mt-4 flex items-center text-sm font-medium text-primary transition-transform group-hover:translate-x-1">
-                      View Details
-                      <ArrowRight className="ml-1 h-4 w-4" />
-                    </div>
-                  </div>
-                </div>
-              </a>
+                </a>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-16 text-center">
+            <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-muted flex items-center justify-center">
+              <Search className="h-8 w-8 text-muted-foreground" />
             </div>
-          ))}
-        </div>
+            <h3 className="mb-2 text-xl font-semibold text-foreground">No projects found</h3>
+            <p className="mb-6 text-muted-foreground">
+              Try adjusting your search or filter criteria
+            </p>
+            <button
+              onClick={clearAllFilters}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors"
+            >
+              Clear all filters
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

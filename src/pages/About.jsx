@@ -217,7 +217,7 @@ const performanceMetrics = [
               <div className="mb-6 flex justify-center">
                 <div className="relative h-40 w-40 overflow-hidden rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 p-1">
                   <div className="relative h-full w-full overflow-hidden rounded-full bg-background">
-                    <img alt="Cristopher Coronado" decoding="async" data-nimg="fill" class="object-cover" sizes="100vw" src="/images/profile/Sahadev.png"
+                    <img alt="Cristopher Coronado" decoding="async" data-nimg="fill" className="object-cover" sizes="100vw" src="/images/profile/Sahadev.png"
                       style={{
                         position: "absolute",
                         height: "100%",

@@ -64,14 +64,14 @@ const HeroSection = () => {
 
             </div>
 
-            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              Crafting high-performance <span class="font-semibold">full-stack solutions</span> for 
-              <span class="font-semibold"> Banking</span> and <span class="font-semibold">Healthcare</span> platforms using 
-              <span class="font-semibold"> .NET Core</span>, <span class="font-semibold"> Angular</span>, and  
-              <span class="font-semibold"> React</span>. Passionate about  
-              <span class="font-semibold"> cloud-native architectures</span>,  
-              <span class="font-semibold"> microservices</span>, and scalable systems on 
-              <span class="font-semibold"> AWS & Azure</span>.
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              Crafting high-performance <span className="font-semibold">full-stack solutions</span> for 
+              <span className="font-semibold"> Banking</span> and <span className="font-semibold">Healthcare</span> platforms using 
+              <span className="font-semibold"> .NET Core</span>, <span className="font-semibold"> Angular</span>, and  
+              <span className="font-semibold"> React</span>. Passionate about  
+              <span className="font-semibold"> cloud-native architectures</span>,  
+              <span className="font-semibold"> microservices</span>, and scalable systems on 
+              <span className="font-semibold"> AWS & Azure</span>.
             </p>
 
 

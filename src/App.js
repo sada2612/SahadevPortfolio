@@ -10,6 +10,7 @@ import TechnicalSkills from './pages/TechnicalSkills';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+import BlogComponent from './components/Home/BlogNavItem';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/projects" element={<Projects />} />
               <Route path="/skills" element={<TechnicalSkills />} />
               <Route path="/about" element={<About />} />
+              <Route path="/blog" element={<BlogComponent />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

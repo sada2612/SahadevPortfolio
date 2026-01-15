@@ -95,6 +95,7 @@ const ProjectsSection = () => {
                 <div className="flex gap-2">
                   <Link
                     to={project.link}
+                    target="_blank"
                     className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium gradient-bg text-white hover:shadow-lg transition-shadow"
                   >
                     View Details

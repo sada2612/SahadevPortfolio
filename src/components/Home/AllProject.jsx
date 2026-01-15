@@ -14,7 +14,7 @@ const AllProjects = () => {
     id: 1,
     title: "Acentra Health - Healthcare Management System",
     description: "Developed healthcare applications to streamline data management and improve user experience. Built secure, scalable modules for patient data management, treatment tracking, and healthcare analytics.",
-    categories: ["Healthcare", "Completed"],
+    categories: ["Healthcare", "Ongoing"],
     technologies: ["ASP.NET Core", "Angular", "Web API", "Entity Framework Core", "SQL Server 2019", "jQuery", "Ajax"],
     featured: true,
     stats: [
@@ -23,7 +23,7 @@ const AllProjects = () => {
       { label: "Modules Developed", value: "10+" },
       { label: "Code Quality", value: "95%" }
     ],
-    link: "/projects/acentra-healthcare-system"
+    link: "https://acentra.com/"
   },
   {
     id: 2,

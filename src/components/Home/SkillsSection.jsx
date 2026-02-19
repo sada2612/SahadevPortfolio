@@ -101,7 +101,7 @@ const SkillsSection = () => {
             <div className="text-sm text-gray-600 dark:text-gray-400">Complementary Skills</div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center border border-gray-200 dark:border-gray-700">
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">3+</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">4+</div>
             <div className="text-sm text-gray-600 dark:text-gray-400">Years Experience</div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center border border-gray-200 dark:border-gray-700">

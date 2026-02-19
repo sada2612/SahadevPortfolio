@@ -153,7 +153,7 @@ const TechnicalSkills = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Experience</p>
-              <p className="text-2xl font-bold text-foreground">3+</p>
+              <p className="text-2xl font-bold text-foreground">4+</p>
             </div>
           </div>
         </div>

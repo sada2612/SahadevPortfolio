@@ -12,7 +12,7 @@ import {
 const About = () => {
   // Quick stats data
   const quickStats = [
-    { label: "Years Exp.", value: "3+", color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/30" },
+    { label: "Years Exp.", value: "4+", color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/30" },
     { label: "Certifications", value: "7", color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/30" },
     { label: "Technologies", value: "55+", color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-950/30" },
     { label: "Successful Projects", value: "7+", color: "text-orange-600 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-950/30" }
@@ -91,7 +91,7 @@ const experience = [
     title: "Software Developer",
     company: "Various Client Projects",
     location: "Remote • Contract",
-    period: "2022 - Present",
+    period: "Feb 2022 - June 2023",
     description: "Worked on multiple client projects including healthcare, banking/fintech, and HR management systems, delivering full-stack solutions with modern technologies.",
     methodology: "Agile/Scrum",
     collaboration: "Client Teams, Business Analysts, End Users",
@@ -179,9 +179,9 @@ const experience = [
 
   // Career highlights
 const careerHighlights = [
-  { value: "3+", label: "Professional Experience" },
+  { value: "4+", label: "Professional Experience" },
   { value: "7+", label: "Completed Projects" },
-  { value: "3+", label: "Client Projects" },
+  { value: "4+", label: "Client Projects" },
   { value: "20+", label: "Technologies Used" },
   { value: "500+", label: "System Capacity" }
 ];
@@ -204,7 +204,7 @@ const performanceMetrics = [
             </span>
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Senior Full Stack Software Engineer with 3+ years of experience building scalable solutions
+            Senior Full Stack Software Engineer with 4+ years of experience building scalable solutions
           </p>
         </div>
 
@@ -237,7 +237,7 @@ const performanceMetrics = [
               {/* Badges */}
               <div className="mb-6 flex flex-wrap justify-center gap-2">
                 <div className="inline-flex items-center rounded-md border text-xs font-semibold shadow bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800 px-3 py-1.5">
-                  🏆 3+ Years Industry Experience
+                  🏆 4+ Years Industry Experience
                 </div>
                 <div className="inline-flex items-center rounded-md border text-xs font-semibold shadow bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800 px-3 py-1.5">
                   ⭐ Full Stack .NET Developer
@@ -288,7 +288,7 @@ const performanceMetrics = [
     {/* Professional Summary */}
     <h3 className="mb-4 text-2xl font-bold text-foreground">Professional Summary</h3>
     <div className="space-y-4 text-muted-foreground leading-relaxed">
-      <p>Software Engineer with 3+ years of experience in designing, developing, and implementing web and client-server applications using Microsoft technologies. Skilled in full-stack development with expertise in .NET Core, Angular, React, and cloud technologies.</p>
+      <p>Software Engineer with 4+ years of experience in designing, developing, and implementing web and client-server applications using Microsoft technologies. Skilled in full-stack development with expertise in .NET Core, Angular, React, and cloud technologies.</p>
       <p>Experienced in requirement gathering, analysis, design, development, testing, and implementation of enterprise applications across diverse domains including Healthcare, Banking/FinTech, and Human Resource Management systems.</p>
       <p>Proficient in building scalable applications using RESTful APIs, microservices architecture, and cloud integrations with AWS and Azure. Strong knowledge of OOP concepts, SOLID principles, and Design Patterns for building maintainable and efficient software solutions.</p>
       <p>Hands-on experience with Agile development methodology, conducting code reviews, debugging, unit testing, and collaborating with cross-functional teams to deliver high-quality software products.</p>

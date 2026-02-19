@@ -12,9 +12,9 @@ import {
 
 const HeroSection = () => {
   const stats = [
-    { value: '3+', label: 'Years Experience' },
-    { value: '25+', label: 'Projects Delivered' },
-    { value: '3+', label: 'Cloud-Based Projects' },,
+    { value: '4+', label: 'Years Experience' },
+    { value: '7+', label: 'Projects Delivered' },
+    { value: '4+', label: 'Cloud-Based Projects' },,
   ];
 
  const techTags = [
@@ -80,7 +80,7 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-3" style={{ opacity: 1, transform: "none" }}>
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border-2 border-blue-200 dark:border-blue-800">
                 <FiAward />
-                3+ Years Industry Experience
+                4+ Years Industry Experience
               </span>
 
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 border-2 border-orange-200 dark:border-orange-800">

@@ -64,7 +64,7 @@ const AllProjects = () => {
     technologies: ["C#", ".NET Core", "Angular", "React", "TypeScript", "SQL Server", "AWS", "Azure"],
     featured: true,
     stats: [
-      { label: "Clients Supported", value: "3+" },
+      { label: "Clients Supported", value: "4+" },
       { label: "Applications Developed", value: "5+" },
       { label: "Code Reviews", value: "50+" },
       { label: "Performance Gain", value: "40%+" }

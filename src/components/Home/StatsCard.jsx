@@ -151,7 +151,7 @@ export const ExperienceCard = ({ years = '6+', ...props }) => (
   />
 );
 
-export const ProjectsCard = ({ count = '25+', ...props }) => (
+export const ProjectsCard = ({ count = '7+', ...props }) => (
   <StatsCard
     value={count}
     label="Projects Delivered"
